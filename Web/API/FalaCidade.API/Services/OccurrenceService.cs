@@ -8,10 +8,12 @@ namespace FalaCidade.API.Services;
 public class OccurrenceService
 {
     private readonly AppDbContext _context;
+    private readonly NotificationService _notificationService; 
 
-    public OccurrenceService(AppDbContext context)
+    public OccurrenceService(AppDbContext context, NotificationService notificationService)
     {
         _context = context;
+        _notificationService = notificationService;
     }
 
     public async Task<Occurrence> CreateAsync(int citizenId, int categoryId, string title, string description, string photoUrl, double latitude, double longitude)
@@ -85,7 +87,10 @@ public class OccurrenceService
         occurrence.UpdatedAt = DateTime.UtcNow;
 
         _context.OccurrenceHistories.Add(history);
-        await _context.SaveChangesAsync(); 
+        await _context.SaveChangesAsync();
+
+        string mensagem = $"A sua solicitação '{occurrence.Title}' foi atualizada para: {newStatus}.";
+        await _notificationService.CreateAsync(occurrence.CitizenId, mensagem, occurrence.Id);
 
         return occurrence;
     }

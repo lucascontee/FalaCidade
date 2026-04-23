@@ -26,6 +26,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<OccurrenceService>();
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 
