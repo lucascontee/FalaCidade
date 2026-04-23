@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FalaCidade.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260422223632_InitialMigration")]
+    [Migration("20260423211112_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -177,6 +177,10 @@ namespace FalaCidade.API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

@@ -19,7 +19,7 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<User>()
             .Property(u => u.Role)
-            .HasConversion<string>();
+            .HasConversion<string>();            
 
         modelBuilder.Entity<Occurrence>()
             .Property(o => o.Status)
