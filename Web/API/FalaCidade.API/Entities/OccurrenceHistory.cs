@@ -13,7 +13,6 @@ public class OccurrenceHistory
         public int OccurrenceId { get; set; }
         public Occurrence Occurrence { get; set; } = null!;
 
-        //Usuário responsável pela mudança (Admin ou Aceitador)
         public int ResponsibleUserId { get; set; }
         public User ResponsibleUser { get; set; } = null!;
 }
