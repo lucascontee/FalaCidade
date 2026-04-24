@@ -51,12 +51,12 @@ public class OccurrenceService
     internal async Task<IEnumerable<Occurrence>> GetAllForFeedAsync()
     {
         return await _context.Occurrences
-    .Include(o => o.Category)
-    .Include(o => o.Citizen)
-    .Where(o => o.Status != OccurrenceStatus.Rejected && o.Status != OccurrenceStatus.UnderReview)
-    .OrderByDescending(o => o.CreatedAt)
-    .AsNoTracking()
-    .ToListAsync();
+            .Include(o => o.Category)
+            .Include(o => o.Citizen)
+            .Where(o => o.Status != OccurrenceStatus.Rejected && o.Status != OccurrenceStatus.UnderReview)
+            .OrderByDescending(o => o.CreatedAt)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task<Occurrence?> GetByIdAsync(int id)
@@ -65,7 +65,7 @@ public class OccurrenceService
             .Include(o => o.Category)
             .Include(o => o.Citizen)
             .Include(o => o.History) 
-                .ThenInclude(h => h.ResponsibleUser)
+            .ThenInclude(h => h.ResponsibleUser)
             .AsNoTracking()
             .FirstOrDefaultAsync(o => o.Id == id);
     }

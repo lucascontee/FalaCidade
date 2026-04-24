@@ -46,6 +46,21 @@ public class UserController : Controller
         }
     }
 
+    [HttpPost("register/admin")]
+    public async Task<IActionResult> CreateAdmin([FromBody] RegisterUserRequest request)
+    {
+        try
+        {
+            var user = await _userService.CreateAdminAsync(request.Name, request.Email, request.Password, request.Cpf);
+
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {

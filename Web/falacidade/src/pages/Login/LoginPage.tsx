@@ -102,7 +102,7 @@ export function LoginPage() {
             <button
               type="button"
               className="text-blue-600 hover:text-blue-700 font-medium text-base"
-              onClick={() => navigate('/register')} // Manda para a tela de cadastro
+              onClick={() => navigate('/register')}
             >
               Criar uma conta
             </button>

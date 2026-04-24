@@ -15,10 +15,13 @@ export interface LoginRequest {
   password?: string; 
 }
 
-export interface RegisterCitizenRequest {
+
+export interface RegisterUserRequest {
   name: string;
   email: string;
   password?: string;
+  cpf: string;
+  role: string;
 }
 
 
@@ -30,11 +33,10 @@ const UserService = {
   },
 
 
-  registerCitizen: async (data: RegisterCitizenRequest): Promise<User> => {
-    const response = await api.post<User>('/api/user/register/citizen', data);
+  registerUser: async (data: RegisterUserRequest): Promise<User> => {
+    const response = await api.post<User>(`/api/user/register/${data.role.toLowerCase()}`, data);
     return response.data;
   },
-
 
   getUserById: async (id: number): Promise<User> => {
     const response = await api.get<User>(`/api/user/${id}`);

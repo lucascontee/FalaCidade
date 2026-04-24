@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, Settings } from "lucide-react";
+import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck } from "lucide-react";
 import { useAuth } from "../context/authContext";
-import { Button } from "../components/ui/button";
 
 const UserRole = {
   Citizen: 0,
@@ -39,8 +38,6 @@ export function Sidebar() {
           label="Feed" 
         />
 
-        {user?.role === UserRole.Citizen && (
-        <>
         <SidebarItem 
           to="/myOccurrences" 
           icon={<ClipboardList size={24} />} 
@@ -51,12 +48,10 @@ export function Sidebar() {
           icon={<PlusCircle size={24} />} 
           label="Criar ocorrência" 
         />
-        </>
-        )}
-
+    
         {(user?.role === UserRole.Admin || user?.role === UserRole.Reviewer) && (
           <>
-            <SidebarItem to="/painel-gestao" icon={<Settings size={24} />} label="Gestão de Ocorrências" />
+            <SidebarItem to="/painel-gestao" icon={<ListCheck size={24} />} label="Gestão de Ocorrências" />
           </>
         )}
         

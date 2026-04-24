@@ -4,6 +4,7 @@ import { User, Plus, MapPin, Loader2, AlertCircle } from "lucide-react";
 import { Badge } from "../../components/ui/badge";
 import { ImageWithFallback } from "../../components/ui/imageWithFallback";
 import OccurrenceService, { type Occurrence, OccurrenceStatus } from "../../services/ocurrenceService";
+import { useAuth } from "../../context/authContext";
 
 function getStatusColor(status: OccurrenceStatus) {
   switch (status) {
@@ -33,7 +34,7 @@ function getStatusLabel(status: OccurrenceStatus) {
 
 export function OccurrencesFeed() {
   const navigate = useNavigate();
-
+  const { user } = useAuth();
   const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -62,9 +63,16 @@ export function OccurrencesFeed() {
         <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
           <div className="px-4 py-4 flex items-center justify-between">
             <h1 className="text-xl font-bold text-gray-900">FalaCidade</h1>
-            <button className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors">
-              <User className="w-5 h-5 text-gray-700" />
-            </button>
+            <div className="flex items-center gap-3">
+              
+              <h3 className="text-sm font-medium text-gray-500 hidden sm:block">
+                {user?.name}
+              </h3>
+              
+              <button className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors flex-shrink-0">
+                <User className="w-5 h-5 text-gray-700" />
+              </button>
+            </div>
           </div>
         </header>
 
@@ -101,7 +109,6 @@ export function OccurrencesFeed() {
                   key={occurrence.id}
                   className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
                 >
-                  {/* 3. Aqui mudamos a altura para 'aspect-[4/5]', que é a proporção de foto vertical do Instagram */}
                   <div className="relative aspect-[4/5] w-full bg-gray-200">
                     <ImageWithFallback
                       src={occurrence.photoUrl || "https://placehold.co/600x750/e2e8f0/64748b?text=Sem+Foto"}
@@ -141,13 +148,13 @@ export function OccurrencesFeed() {
           )}
         </div>
 
-        <button
-          onClick={() => navigate("/occurrence")}
-          className="absolute bottom-6 right-6 w-16 h-16 bg-blue-600 hover:bg-blue-700 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 z-50 sm:fixed sm:bottom-10 sm:right-10"
-          aria-label="Reportar nova ocorrência"
-        >
-          <Plus className="w-8 h-8 text-white" />
+        <button onClick={() => navigate("/occurrence")}
+                   className="absolute bottom-6 right-6 w-16 h-16 bg-blue-600 hover:bg-blue-700 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 z-50 sm:fixed sm:bottom-10 sm:right-10"
+                   aria-label="Reportar nova ocorrência">
+              <Plus className="w-8 h-8 text-white" />
         </button>
+
+        
 
       </div>
     </div>

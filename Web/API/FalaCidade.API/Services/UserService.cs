@@ -116,6 +116,46 @@ public class UserService
         return newReviewer;
     }
 
+    public async Task<User> CreateAdminAsync(string name, string email, string rawPassword, string cpf)
+    {
+        if (!IsEmailValid(email))
+        {
+            throw new Exception("O e-mail informado tem um formato inválido.");
+        }
+
+        if (!IsCpfValid(cpf))
+        {
+            throw new Exception("O CPF informado é inválido.");
+        }
+
+        var cleanCpf = new string(cpf.Where(char.IsDigit).ToArray());
+
+        if (await _context.Users.AnyAsync(u => u.Email == email))
+        {
+            throw new Exception("Este e-mail já está em uso.");
+        }
+
+        if (await _context.Users.AnyAsync(u => u.Cpf == cleanCpf))
+        {
+            throw new Exception("Este CPF já está em uso.");
+        }
+
+        var newReviewer = new User
+        {
+            Name = name,
+            Email = email,
+            Password = BCrypt.Net.BCrypt.HashPassword(rawPassword),
+            Cpf = cleanCpf,
+            Role = UserRole.Admin,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.Users.Add(newReviewer);
+        await _context.SaveChangesAsync();
+
+        return newReviewer;
+    }
+
     public async Task<User?> GetUserByIdAsync(int id)
     {
         return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);

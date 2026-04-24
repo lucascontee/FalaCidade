@@ -8,6 +8,7 @@ import { OccurrenceEditor } from './pages/Occurrence/OccurrenceEditor'
 import { MyOccurrences } from './pages/Occurrence/MyOccurrencesPage'
 
 import { Sidebar } from './layouts/sidebar'
+import { RegisterScreen } from './pages/Register/RegisterScreen'
 
 function AuthenticatedLayout() {
   return (
@@ -24,6 +25,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterScreen />} />
 
       <Route element={<AuthenticatedLayout />}>
         <Route path="/feed" element={<OccurrencesFeed />} />
