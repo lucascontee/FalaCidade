@@ -23,13 +23,33 @@ export interface Occurrence {
   longitude: number;
   status: OccurrenceStatus;
   createdAt: string;
-  category?: Category; // Vem junto por causa do .Include(o => o.Category) no C#
+  category?: Category; 
+}
+
+export interface CreateOccurrencePayload {
+  citizenId: number;
+  categoryId: number;
+  title: string;
+  description: string;
+  photoUrl: string;
+  latitude: number;
+  longitude: number;
 }
 
 const OccurrenceService = {
 
   getAll: async (): Promise<Occurrence[]> => {
     const response = await api.get<Occurrence[]>('/api/occurrence');
+    return response.data;
+  },
+
+  create: async (data: CreateOccurrencePayload): Promise<Occurrence> => {
+    const response = await api.post<Occurrence>('/api/occurrence', data);
+    return response.data;
+  },
+
+  getCategories: async (): Promise<Category[]> => {
+    const response = await api.get<Category[]>('/api/category');
     return response.data;
   }
 };
