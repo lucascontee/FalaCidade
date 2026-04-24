@@ -6,7 +6,7 @@ export interface User {
   name: string;
   email: string;
   cpf?: string; 
-  role: 'Citizen' | 'Reviewer' | 'Admin'; 
+  role: number; 
   createdAt: string; 
 }
 

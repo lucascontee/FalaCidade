@@ -82,6 +82,13 @@ public class OccurrenceController : ControllerBase
         var history = await _occurrenceService.GetHistoryAsync(id);
         return Ok(history);
     }
+
+    [HttpGet("user/{citizenId}")]
+    public async Task<IActionResult> GetByUser(int citizenId)
+    {
+        var occurrences = await _occurrenceService.GetByCitizenIdAsync(citizenId);
+        return Ok(occurrences);
+    }
 }
 public record CreateOccurrenceRequest(int CitizenId, int CategoryId, string Title, string Description, string PhotoUrl, double Latitude, double Longitude);
 public record UpdateStatusRequest(int ResponsibleUserId, OccurrenceStatus NewStatus, string Notes);

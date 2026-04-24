@@ -115,5 +115,13 @@ public class OccurrenceService
             .ToListAsync();
     }
 
-
+    public async Task<IEnumerable<Occurrence>> GetByCitizenIdAsync(int citizenId)
+    {
+        return await _context.Occurrences
+            .Include(o => o.Category)
+            .Where(o => o.CitizenId == citizenId)
+            .OrderByDescending(o => o.CreatedAt)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }

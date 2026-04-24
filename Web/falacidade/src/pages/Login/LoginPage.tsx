@@ -7,21 +7,26 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import UserService from "../../services/userService"; 
 import axios from "axios";
+import { useAuth } from "../../context/authContext";
 
-export function LoginScreen() {
+export function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false); 
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault(); 
     setIsLoading(true);
 
     try {
       const user = await UserService.login({ email, password });
-      
+      login(user);
+
       console.log('Bem-vindo, ', user.name);
+      console.log('Papel: ', user.role);
       
       navigate('/feed'); 
       

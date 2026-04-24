@@ -56,7 +56,12 @@ const OccurrenceService = {
   getCategories: async (): Promise<Category[]> => {
     const response = await api.get<Category[]>('/api/category');
     return response.data;
-  }
+  },
+  
+  getByUserId: async (userId: number): Promise<Occurrence[]> => {
+    const response = await api.get<Occurrence[]>(`/api/occurrence/user/${userId}`);
+    return response.data;
+  },
 };
 
 export default OccurrenceService;

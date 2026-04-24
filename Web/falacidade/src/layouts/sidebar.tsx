@@ -1,11 +1,26 @@
-import { NavLink } from "react-router-dom";
-import { LayoutGrid, ClipboardList, PlusCircle, LogOut } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, Settings } from "lucide-react";
+import { useAuth } from "../context/authContext";
+import { Button } from "../components/ui/button";
+
+const UserRole = {
+  Citizen: 0,
+  Reviewer: 1,
+  Admin: 2
+};
 
 export function Sidebar() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+      logout();
+      navigate('/'); 
+    };
+
   return (
     <aside className="fixed top-0 left-0 h-screen bg-white border-r border-gray-200 shadow-sm transition-all duration-300 ease-in-out w-16 hover:w-64 group z-50 flex flex-col">
       
-      {/* Cabeçalho / Logo do Menu */}
       <div className="h-16 flex items-center justify-center border-b border-gray-100 overflow-hidden">
         <div className="flex items-center gap-3 px-4 w-full whitespace-nowrap">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
@@ -17,13 +32,15 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Links de Navegação */}
       <nav className="flex-1 py-6 flex flex-col gap-2 px-2">
         <SidebarItem 
           to="/feed" 
           icon={<LayoutGrid size={24} />} 
           label="Feed" 
         />
+
+        {user?.role === UserRole.Citizen && (
+        <>
         <SidebarItem 
           to="/myOccurrences" 
           icon={<ClipboardList size={24} />} 
@@ -34,16 +51,28 @@ export function Sidebar() {
           icon={<PlusCircle size={24} />} 
           label="Criar ocorrência" 
         />
+        </>
+        )}
+
+        {(user?.role === UserRole.Admin || user?.role === UserRole.Reviewer) && (
+          <>
+            <SidebarItem to="/painel-gestao" icon={<Settings size={24} />} label="Gestão de Ocorrências" />
+          </>
+        )}
+        
+        {user?.role === UserRole.Admin && (
+           <SidebarItem to="/usuarios" icon={<Users size={24} />} label="Gerenciar Usuários" />
+        )}
       </nav>
 
-      {/* Rodapé com botão de Sair */}
       <div className="p-2 border-t border-gray-100">
-        <SidebarItem 
-          to="/" 
-          icon={<LogOut size={24} className="text-red-500" />} 
-          label="Sair" 
-          isLogout
-        />
+          <SidebarItem 
+            to="/" 
+            icon={<LogOut size={24} className="text-red-500" />} 
+            label="Sair" 
+            isLogout
+            onClick={handleLogout}
+            />
       </div>
     </aside>
   );
@@ -55,12 +84,14 @@ interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   isLogout?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
-function SidebarItem({ to, icon, label, isLogout }: SidebarItemProps) {
+function SidebarItem({ to, icon, label, isLogout, onClick }: SidebarItemProps) {
   return (
     <NavLink
       to={to}
+      onClick={onClick}
       className={({ isActive }) =>
         `flex items-center gap-4 px-3 py-3 rounded-lg transition-colors overflow-hidden ${
           isActive && !isLogout

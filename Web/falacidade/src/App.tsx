@@ -2,9 +2,11 @@ import { Outlet, Route, Routes } from 'react-router-dom'
 
 import './App.css'
 
-import { LoginScreen } from './pages/login/loginScreen'
-import { OccurrencesFeed } from './pages/occurrence/ocurrenceFeed'
-import { OccurrenceEditor } from './pages/occurrence/occurrenceEditor'
+import { LoginPage } from './pages/Login/LoginPage'
+import { OccurrencesFeed } from './pages/Occurrence/OcurrenceFeed'
+import { OccurrenceEditor } from './pages/Occurrence/OccurrenceEditor'
+import { MyOccurrences } from './pages/Occurrence/MyOccurrencesPage'
+
 import { Sidebar } from './layouts/sidebar'
 
 function AuthenticatedLayout() {
@@ -21,15 +23,12 @@ function AuthenticatedLayout() {
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginScreen />} />
+      <Route path="/" element={<LoginPage />} />
 
       <Route element={<AuthenticatedLayout />}>
         <Route path="/feed" element={<OccurrencesFeed />} />
         <Route path="/occurrence" element={<OccurrenceEditor />} />
-        
-        <Route path="/minhas-ocorrencias" element={
-          <div className="p-8"><h1 className="text-2xl font-bold">Minhas Ocorrências (Em breve)</h1></div>
-        } />
+        <Route path="/myoccurrences" element={<MyOccurrences />} />
       </Route>
     </Routes>
   );
