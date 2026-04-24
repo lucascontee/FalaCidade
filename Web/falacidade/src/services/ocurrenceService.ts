@@ -43,6 +43,11 @@ const OccurrenceService = {
     return response.data;
   },
 
+  getAllForFeed: async (): Promise<Occurrence[]> => {
+    const response = await api.get<Occurrence[]>('/api/occurrence/getAllForFeed');
+    return response.data;
+  },
+
   create: async (data: CreateOccurrencePayload): Promise<Occurrence> => {
     const response = await api.post<Occurrence>('/api/occurrence', data);
     return response.data;

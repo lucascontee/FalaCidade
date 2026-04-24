@@ -38,6 +38,13 @@ public class OccurrenceController : ControllerBase
         return Ok(occurrences);
     }
 
+    [HttpGet("getAllForFeed")]
+    public async Task<IActionResult> GetAllForFeed()
+    {
+        var occurences = await _occurrenceService.GetAllForFeedAsync();
+        return Ok(occurences);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {

@@ -41,7 +41,7 @@ export function OccurrencesFeed() {
   useEffect(() => {
     async function loadOccurrences() {
       try {
-        const data = await OccurrenceService.getAll();
+        const data = await OccurrenceService.getAllForFeed();
         setOccurrences(data);
       } catch (err) {
         console.error(err);
@@ -142,7 +142,7 @@ export function OccurrencesFeed() {
         </div>
 
         <button
-          onClick={() => navigate("/newoccurrence")}
+          onClick={() => navigate("/occurrence")}
           className="absolute bottom-6 right-6 w-16 h-16 bg-blue-600 hover:bg-blue-700 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 z-50 sm:fixed sm:bottom-10 sm:right-10"
           aria-label="Reportar nova ocorrência"
         >

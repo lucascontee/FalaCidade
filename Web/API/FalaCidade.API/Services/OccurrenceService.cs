@@ -48,6 +48,16 @@ public class OccurrenceService
             .ToListAsync();
     }
 
+    internal async Task<IEnumerable<Occurrence>> GetAllForFeedAsync()
+    {
+        return await _context.Occurrences
+    .Include(o => o.Category)
+    .Include(o => o.Citizen)
+    .Where(o => o.Status != OccurrenceStatus.Rejected && o.Status != OccurrenceStatus.UnderReview)
+    .OrderByDescending(o => o.CreatedAt)
+    .AsNoTracking()
+    .ToListAsync();
+    }
 
     public async Task<Occurrence?> GetByIdAsync(int id)
     {
@@ -104,4 +114,6 @@ public class OccurrenceService
             .AsNoTracking()
             .ToListAsync();
     }
+
+
 }
