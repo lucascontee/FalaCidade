@@ -14,8 +14,6 @@ public class UserService
     {
         _context = context;
     }
-
-
     public async Task<User?> AuthenticateAsync(string email, string password)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
@@ -33,6 +31,11 @@ public class UserService
         }
 
         return user;
+    }
+
+    public async Task<IEnumerable<User>> GetAllAsync()
+    {
+        return await _context.Users.ToListAsync();
     }
 
     public async Task<User> CreateCitizenAsync(string name, string email, string rawPassword, string cpf)

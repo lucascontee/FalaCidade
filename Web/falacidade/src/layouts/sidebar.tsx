@@ -56,7 +56,7 @@ export function Sidebar() {
         )}
         
         {user?.role === UserRole.Admin && (
-           <SidebarItem to="/usuarios" icon={<Users size={24} />} label="Gerenciar Usuários" />
+           <SidebarItem to="/users" icon={<Users size={24} />} label="Gerenciar Usuários" />
         )}
       </nav>
 
@@ -73,7 +73,6 @@ export function Sidebar() {
   );
 }
 
-// Subcomponente para facilitar a criação dos botões
 interface SidebarItemProps {
   to: string;
   icon: React.ReactNode;

@@ -4,6 +4,7 @@ import { MapPin, Loader2, AlertCircle, Inbox, Plus } from "lucide-react";
 import { Badge } from "../../components/ui/badge";
 import { ImageWithFallback } from "../../components/ui/imageWithFallback";
 import OccurrenceService, { type Occurrence, OccurrenceStatus } from "../../services/ocurrenceService";
+import { useAuth } from "../../context/authContext";
 
 function getStatusColor(status: OccurrenceStatus) {
   switch (status) {
@@ -25,6 +26,7 @@ function getStatusLabel(status: OccurrenceStatus) {
 
 export function MyOccurrences() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -32,7 +34,7 @@ export function MyOccurrences() {
   useEffect(() => {
     async function loadMyOccurrences() {
       try {
-        const data = await OccurrenceService.getByUserId(1);
+        const data = await OccurrenceService.getByUserId(user?.id || 0);
         setOccurrences(data);
       } catch (err) {
         console.error(err);

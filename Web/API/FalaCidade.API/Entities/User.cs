@@ -13,7 +13,6 @@ public class User
     public UserRole Role { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Propriedades de Navegação
     public ICollection<Occurrence> Occurrences { get; set; } = new List<Occurrence>();
-    //public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

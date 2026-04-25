@@ -32,6 +32,10 @@ const UserService = {
     return response.data;
   },
 
+  getAll: async (): Promise<User[]> => {
+    const response = await api.get<User[]>('/api/user');
+    return response.data;
+  },
 
   registerUser: async (data: RegisterUserRequest): Promise<User> => {
     const response = await api.post<User>(`/api/user/register/${data.role.toLowerCase()}`, data);
@@ -41,6 +45,10 @@ const UserService = {
   getUserById: async (id: number): Promise<User> => {
     const response = await api.get<User>(`/api/user/${id}`);
     return response.data;
+  },
+
+  updateRole: async (userId: number, newRole: number): Promise<void> => {
+    await api.patch(`/api/user/${userId}/role`, { role: newRole });
   }
 };
 

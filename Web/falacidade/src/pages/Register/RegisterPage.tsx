@@ -8,17 +8,15 @@ import UserService from "../../services/userService";
 import { useAuth } from "../../context/authContext";
 import axios from "axios";
 
-export function RegisterScreen() {
+export function RegisterPage() {
   const navigate = useNavigate();
-  const { login } = useAuth(); // Usamos o contexto para já logar o usuário automaticamente após o cadastro
+  const { login } = useAuth(); 
 
-  // Estados do formulário
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [cpf, setCpf] = useState("");
-  // Estados de controle da tela
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -26,7 +24,6 @@ export function RegisterScreen() {
     e.preventDefault();
     setErrorMessage("");
 
-    // 1. Validação de senhas iguais no frontend
     if (password !== confirmPassword) {
       return setErrorMessage("As senhas não coincidem.");
     }
@@ -38,7 +35,6 @@ export function RegisterScreen() {
     setIsLoading(true);
 
     try {
-      // 2. Chama a API para criar a conta
       const newUser = await UserService.registerUser({
         name,
         email,
@@ -169,7 +165,6 @@ export function RegisterScreen() {
             </Button>
           </form>
 
-          {/* Link para voltar ao Login */}
           <div className="mt-8 text-center">
             <span className="text-gray-600 text-sm">Já tem uma conta? </span>
             <button

@@ -86,6 +86,13 @@ public class UserController : Controller
 
         return Ok(user);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        var users = await _userService.GetAllAsync();
+        return Ok(users);
+    }
 }
 public record RegisterUserRequest(string Name, string Email, string Password, string Cpf);
 public record LoginRequest(string Email, string Password);
