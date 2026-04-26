@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FalaCidade.API.Controllers;
 
-[ApiController] 
+[ApiController]
 [Route("api/[controller]")]
 public class UserController : Controller
 {
@@ -29,6 +29,13 @@ public class UserController : Controller
         {
             return BadRequest(new { error = ex.Message });
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        var users = await _userService.GetAllAsync();
+        return Ok(users);
     }
 
     [HttpPost("register/reviwer")]
@@ -87,12 +94,27 @@ public class UserController : Controller
         return Ok(user);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUsers()
+    [HttpPatch("{id}/role")]
+    public async Task<IActionResult> UpdateRole(int id, [FromBody] UpdateRoleDto UpdateRole)
     {
-        var users = await _userService.GetAllAsync();
-        return Ok(users);
+        try
+         {
+            await _userService.UpdateRole(id, UpdateRole.Role);
+            return Ok(new { message = "Papel do usuário atualizado com sucesso!" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+
+
     }
+
 }
 public record RegisterUserRequest(string Name, string Email, string Password, string Cpf);
 public record LoginRequest(string Email, string Password);
+
+public class UpdateRoleDto
+{
+    public int Role { get; set; }
+}

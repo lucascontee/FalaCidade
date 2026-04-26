@@ -30,13 +30,20 @@ function AuthenticatedLayout() {
 } 
 
 function AdminRoute() {
-  const { user } = useAuth(); // Se tiver um loading no contexto, use aqui
-
+  const { user } = useAuth(); 
+  
   if (!user || user.role !== UserRole.Admin) {
     return <Navigate to="/feed" replace />;
   }
 
-  return <Outlet />;
+  return (
+    <div className="flex bg-gray-50 min-h-screen">
+      <Sidebar />
+      <main className="flex-1 pl-16 w-full">
+        <Outlet /> 
+      </main>
+    </div>
+  )
 }
 
 function App() {

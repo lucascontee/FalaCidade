@@ -2,6 +2,7 @@
 using FalaCidade.API.Entities;
 using FalaCidade.API.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Formats.Asn1;
 using System.Text.RegularExpressions;
 
 namespace FalaCidade.API.Services;
@@ -164,7 +165,22 @@ public class UserService
         return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public static bool IsCpfValid(string cpf)
+    public async Task UpdateRole(int id, int role)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            throw new Exception("Usuário não encontrado");
+        }
+
+        var userRole = IntToUserRole(role);
+        user.Role = userRole;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public bool IsCpfValid(string cpf)
     {
         if (string.IsNullOrWhiteSpace(cpf))
             return false;
@@ -199,7 +215,7 @@ public class UserService
         return int.Parse(cpf[10].ToString()) == digito2;
     }
 
-    public static bool IsEmailValid(string email)
+    public bool IsEmailValid(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             return false;
@@ -207,5 +223,18 @@ public class UserService
         var regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", RegexOptions.IgnoreCase);
 
         return regex.IsMatch(email);
+    }
+
+    public UserRole IntToUserRole(int role)
+    {
+        switch (role)
+        {
+            case 1:
+                return UserRole.Reviewer;
+            case 2:
+                return UserRole.Admin;
+            default:
+                return UserRole.Citizen;
+        }
     }
 }
