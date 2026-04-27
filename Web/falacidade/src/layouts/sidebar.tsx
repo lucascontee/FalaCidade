@@ -51,7 +51,7 @@ export function Sidebar() {
     
         {(user?.role === UserRole.Admin || user?.role === UserRole.Reviewer) && (
           <>
-            <SidebarItem to="/painel-gestao" icon={<ListCheck size={24} />} label="Gestão de Ocorrências" />
+            <SidebarItem to="/ocurrencemanage" icon={<ListCheck size={24} />} label="Gestão de Ocorrências" />
           </>
         )}
         

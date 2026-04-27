@@ -11,6 +11,7 @@ import { Sidebar } from './layouts/sidebar'
 import { RegisterPage } from './pages/Register/RegisterPage'
 import { UserManagePage} from './pages/UserManager/UserManagerPage'
 import { useAuth } from './context/authContext'
+import { OccurrenceManageScreen } from './pages/OccurranceManage/OccuranceManagePage'
 
 const UserRole = {
   Citizen: 0,
@@ -56,6 +57,7 @@ function App() {
         <Route path="/feed" element={<OccurrencesFeed />} />
         <Route path="/occurrence" element={<OccurrenceEditor />} />
         <Route path="/myoccurrences" element={<MyOccurrences />} />
+        <Route path="/ocurrencemanage" element={<OccurrenceManageScreen />} />
       </Route>
 
       <Route element={<AdminRoute />}>

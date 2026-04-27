@@ -1,9 +1,11 @@
 import api from './api';
+import type { User } from './userService';
 
 export const OccurrenceStatus = {
   UnderReview: 0,
   InProgress: 1,
-  Resolved: 2
+  Resolved: 2,
+  Rejected: 3
 } as const;
 
 export type OccurrenceStatus = typeof OccurrenceStatus[keyof typeof OccurrenceStatus];
@@ -24,6 +26,7 @@ export interface Occurrence {
   status: OccurrenceStatus;
   createdAt: string;
   category?: Category; 
+  histories?: OccurrenceHistory[];
 }
 
 export interface CreateOccurrencePayload {
@@ -34,6 +37,18 @@ export interface CreateOccurrencePayload {
   photoUrl: string;
   latitude: number;
   longitude: number;
+}
+
+export interface OccurrenceHistory {
+  id: number;
+  occurrenceId: number;
+  responsibleUserId: number; 
+  responsibleUser?: User; 
+  userName?: string; 
+  notes: string;
+  previousStatus: OccurrenceStatus;
+  newStatus: OccurrenceStatus;
+  createdAt: string;
 }
 
 const OccurrenceService = {
@@ -62,6 +77,18 @@ const OccurrenceService = {
     const response = await api.get<Occurrence[]>(`/api/occurrence/user/${userId}`);
     return response.data;
   },
+
+  updateStatus: async (
+    occurrenceId: number, 
+    payload: { newStatus: OccurrenceStatus; message: string; userId: number }
+  ): Promise<void> => {
+    await api.post(`/api/occurrence/${occurrenceId}/history`, payload);
+  },
+
+  getHistory: async (occurrenceId: number): Promise<OccurrenceHistory[]> => {
+    const response = await api.get<OccurrenceHistory[]>(`/api/occurrence/${occurrenceId}/history`);
+    return response.data;
+  }
 };
 
 export default OccurrenceService;

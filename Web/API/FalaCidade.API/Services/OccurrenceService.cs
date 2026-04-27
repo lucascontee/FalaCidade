@@ -124,4 +124,31 @@ public class OccurrenceService
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task AddHistoryAsync(int occurrenceId, int userId, OccurrenceStatus newStatus, string message)
+    {
+        var occurrence = await _context.Occurrences.FirstOrDefaultAsync(o => o.Id == occurrenceId);
+
+        if (occurrence == null)
+        {
+            throw new Exception("Ocorrência não encontrada.");
+        }
+
+        var previousStatus = occurrence.Status;
+
+        occurrence.Status = newStatus;
+
+        var historyRecord = new OccurrenceHistory
+        {
+            OccurrenceId = occurrenceId,
+            ResponsibleUserId = userId,
+            PreviousStatus = previousStatus,
+            NewStatus = newStatus,
+            Notes = message,
+            CreatedAt = DateTime.UtcNow 
+        };
+
+        await _context.OccurrenceHistories.AddAsync(historyRecord);
+        await _context.SaveChangesAsync();
+    }
 }

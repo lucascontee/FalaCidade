@@ -76,6 +76,20 @@ public class OccurrenceController : ControllerBase
         return Ok(occurrence);
     }
 
+    [HttpPost("{id}/history")]
+    public async Task<IActionResult> AddHistory(int id, [FromBody] AddHistoryRequest request)
+    {
+        try
+        {
+            await _occurrenceService.AddHistoryAsync(id, request.UserId, request.NewStatus, request.Message);
+            return Ok(new { message = "Status e histórico atualizados com sucesso!" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     [HttpGet("{id}/history")]
     public async Task<IActionResult> GetHistory(int id)
     {
@@ -92,3 +106,4 @@ public class OccurrenceController : ControllerBase
 }
 public record CreateOccurrenceRequest(int CitizenId, int CategoryId, string Title, string Description, string PhotoUrl, double Latitude, double Longitude);
 public record UpdateStatusRequest(int ResponsibleUserId, OccurrenceStatus NewStatus, string Notes);
+public record AddHistoryRequest(OccurrenceStatus NewStatus, string Message, int UserId);
