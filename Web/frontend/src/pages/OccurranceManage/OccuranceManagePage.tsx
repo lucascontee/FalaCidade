@@ -9,7 +9,6 @@ import OccurrenceService, { type Occurrence, type OccurrenceHistory, OccurrenceS
 import { useAuth } from "../../context/authContext";
 import axios from "axios";
 
-// Auxiliares de UI
 function getStatusConfig(status: OccurrenceStatus) {
   switch (status) {
     case OccurrenceStatus.UnderReview: return { color: "bg-amber-100 text-amber-800", label: "Em Análise", icon: Clock };
@@ -23,20 +22,16 @@ function getStatusConfig(status: OccurrenceStatus) {
 export function OccurrenceManageScreen() {
   const { user } = useAuth();
   
-  // Estados Principais
   const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
   const [selectedOccurrence, setSelectedOccurrence] = useState<Occurrence | null>(null);
   
-  // NOVO: Estado para armazenar o histórico da ocorrência selecionada
   const [histories, setHistories] = useState<OccurrenceHistory[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   
-  // Estados de UI e Busca
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   
-  // Estados do Formulário de Ação
   const [newMessage, setNewMessage] = useState("");
   const [newStatus, setNewStatus] = useState<OccurrenceStatus | "">("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,13 +51,11 @@ export function OccurrenceManageScreen() {
     }
   }
 
-  // NOVO: Agora essa função é assíncrona para buscar o histórico na hora do clique
   const handleSelect = async (occurrence: Occurrence) => {
     setSelectedOccurrence(occurrence);
     setNewStatus(occurrence.status);
     setNewMessage("");
     
-    // Busca o histórico da API
     setIsLoadingHistory(true);
     try {
       const historyData = await OccurrenceService.getHistory(occurrence.id);
@@ -87,11 +80,9 @@ export function OccurrenceManageScreen() {
         userId: user.id
       });
 
-      // Atualiza os dados na tela
       await loadOccurrences(); 
       setSelectedOccurrence(prev => prev ? { ...prev, status: Number(newStatus) as OccurrenceStatus } : null);
       
-      // Busca o histórico novamente para a nova mensagem aparecer imediatamente
       const updatedHistory = await OccurrenceService.getHistory(selectedOccurrence.id);
       setHistories(updatedHistory);
       
@@ -116,7 +107,6 @@ export function OccurrenceManageScreen() {
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       
-      {/* PAINEL ESQUERDO: LISTA DE OCORRÊNCIAS */}
       <div className="w-full md:w-1/3 bg-white border-r border-gray-200 flex flex-col h-full z-10 shadow-sm">
         <div className="p-4 border-b border-gray-200 bg-gray-50">
           <h1 className="text-lg font-bold text-gray-900 mb-4">Gestão de Ocorrências</h1>
@@ -162,12 +152,10 @@ export function OccurrenceManageScreen() {
         </div>
       </div>
 
-      {/* PAINEL DIREITO: DETALHES E HISTÓRICO */}
       <div className="hidden md:flex flex-1 flex-col h-full bg-gray-50 overflow-hidden">
         {selectedOccurrence ? (
           <div className="flex-1 overflow-y-auto p-6 flex flex-col xl:flex-row gap-6">
             
-            {/* Coluna 1: Dados da Ocorrência */}
             <div className="flex-1 space-y-6">
               <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
                 <div className="flex justify-between items-start mb-4">
@@ -181,10 +169,9 @@ export function OccurrenceManageScreen() {
                 
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
                   <MapPin className="w-4 h-4" />
-                  <span>Lat: {selectedOccurrence.latitude.toFixed(4)}, Lng: {selectedOccurrence.longitude.toFixed(4)}</span>
+                  <span>{selectedOccurrence.street}{selectedOccurrence.neighborhood ? `, ${selectedOccurrence.neighborhood}` : ''} - {selectedOccurrence.city}</span>
                 </div>
 
-                {/* IMAGEM VERTICAL: Alterado aspect ratio para 4/5 e largura máxima para ficar igual Instagram */}
                 <div className="flex justify-center w-full">
                   <div className="aspect-[4/5] w-full max-w-sm rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
                     <ImageWithFallback 
@@ -198,10 +185,8 @@ export function OccurrenceManageScreen() {
               </div>
             </div>
 
-            {/* Coluna 2: Histórico e Ações */}
             <div className="w-full xl:w-[400px] flex flex-col gap-4">
               
-              {/* Timeline de Histórico */}
               <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex-1 overflow-y-auto">
                 <h3 className="font-bold text-gray-900 mb-4 sticky top-0 bg-white z-20 pb-2 border-b border-gray-50">Histórico de Ações</h3>
                 
@@ -221,7 +206,7 @@ export function OccurrenceManageScreen() {
                           <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 flex-1 shadow-sm">
                             <div className="flex flex-col xl:flex-row justify-between xl:items-center mb-1 gap-1">
                               <span className="text-xs font-bold text-gray-900">{history.responsibleUser?.name || `Usuário #${history.responsibleUserId}`}</span>
-                              <span className="text-[10px] text-gray-500">{new Date(history.createdAt).toLocaleString()}</span>
+                              <span className="text-[10px] text-gray-500">{new Date(history.createdAt).toLocaleString('pt-BR')}</span>
                             </div>
                             <p className="text-sm text-gray-700 mt-2">{history.notes}</p>
                           </div>
@@ -232,7 +217,6 @@ export function OccurrenceManageScreen() {
                 )}
               </div>
 
-              {/* Caixa de Ação (Nova Mensagem / Status) */}
               <form onSubmit={handleUpdate} className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm shrink-0">
                 <h3 className="font-bold text-gray-900 mb-3">Atualizar Ocorrência</h3>
                 

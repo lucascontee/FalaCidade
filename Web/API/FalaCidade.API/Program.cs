@@ -28,6 +28,12 @@ builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<OccurrenceService>();
 builder.Services.AddScoped<NotificationService>();
 
+
+builder.Services.AddHttpClient<OccurrenceService>(client =>
+{
+    client.DefaultRequestHeaders.Add("User-Agent", "FalaCidadeApp/1.0 (lucascontee@icloud.com)");
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>

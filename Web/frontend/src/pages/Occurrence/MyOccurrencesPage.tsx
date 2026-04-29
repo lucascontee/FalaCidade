@@ -122,7 +122,7 @@ export function MyOccurrences() {
 
                   <div className="flex items-center gap-1 text-xs text-gray-500">
                     <MapPin className="w-3 h-3" />
-                    <span className="truncate">Localização marcada no mapa</span>
+                    <span className="truncate">{occurrence.street}{occurrence.neighborhood ? `, ${occurrence.neighborhood}` : ''} - {occurrence.city}</span>
                   </div>
                 </div>
               </div>

@@ -12,6 +12,9 @@ public class Occurrence
 
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public string? City {  get; set; } = string.Empty;
+    public string? Neighborhood {  get; set; } = string.Empty;
+    public string? Street {  get; set; } = string.Empty;
 
     public OccurrenceStatus Status { get; set; } = OccurrenceStatus.UnderReview;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

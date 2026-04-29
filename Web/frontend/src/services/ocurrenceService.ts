@@ -23,6 +23,9 @@ export interface Occurrence {
   photoUrl: string;
   latitude: number;
   longitude: number;
+  city: string;
+  neighborhood: string;
+  street: string;
   status: OccurrenceStatus;
   createdAt: string;
   category?: Category; 
@@ -88,7 +91,32 @@ const OccurrenceService = {
   getHistory: async (occurrenceId: number): Promise<OccurrenceHistory[]> => {
     const response = await api.get<OccurrenceHistory[]>(`/api/occurrence/${occurrenceId}/history`);
     return response.data;
+  },
+
+  getAddressFromCoords: async (lat: number, lng: number): Promise<string> => {
+    try {
+      // Fazemos uma requisição GET para a API do Nominatim
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
+      );
+      
+      const data = await response.json();
+
+      if (data && data.address) {
+        const street = data.address.road || "Rua desconhecida";
+        const neighborhood = data.address.suburb || data.address.neighbourhood || "";
+        const city = data.address.city || data.address.town || data.address.village || "";
+        
+        return `${street}${neighborhood ? `, ${neighborhood}` : ''} - ${city}`;
+      }
+      
+      return "Endereço não encontrado";
+    } catch (error) {
+      console.error("Erro ao buscar endereço:", error);
+      return "Erro ao carregar endereço";
+    }
   }
 };
+
 
 export default OccurrenceService;

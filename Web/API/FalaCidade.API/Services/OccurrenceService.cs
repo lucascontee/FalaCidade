@@ -1,7 +1,10 @@
-﻿using FalaCidade.API.Data;
+﻿using Azure;
+using FalaCidade.API.Data;
+using FalaCidade.API.DTO;
 using FalaCidade.API.Entities;
 using FalaCidade.API.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace FalaCidade.API.Services;
 
@@ -9,11 +12,13 @@ public class OccurrenceService
 {
     private readonly AppDbContext _context;
     private readonly NotificationService _notificationService; 
+    private readonly HttpClient _httpClient;
 
-    public OccurrenceService(AppDbContext context, NotificationService notificationService)
+    public OccurrenceService(AppDbContext context, NotificationService notificationService, HttpClient httpClient)
     {
         _context = context;
         _notificationService = notificationService;
+        _httpClient = httpClient;
     }
 
     public async Task<Occurrence> CreateAsync(int citizenId, int categoryId, string title, string description, string photoUrl, double latitude, double longitude)
@@ -30,6 +35,14 @@ public class OccurrenceService
             Status = OccurrenceStatus.UnderReview, 
             CreatedAt = DateTime.UtcNow
         };
+
+        AddressDTO address = await GetAddressFromCoordsAsync(latitude, longitude);
+        if(address != null)
+        {
+            occurrence.City = address.Address.City;
+            occurrence.Neighborhood = address.Address.Neighbourhood;
+            occurrence.Street = address.Address.Road;
+        }
 
         _context.Occurrences.Add(occurrence);
         await _context.SaveChangesAsync();
@@ -150,5 +163,39 @@ public class OccurrenceService
 
         await _context.OccurrenceHistories.AddAsync(historyRecord);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<AddressDTO> GetAddressFromCoordsAsync(double lat, double lng)
+    {
+        AddressDTO address = new AddressDTO();
+        var latStr = lat.ToString(CultureInfo.InvariantCulture);
+        var lngStr = lng.ToString(CultureInfo.InvariantCulture);
+
+        var url = $"https://nominatim.openstreetmap.org/reverse?format=json&lat={latStr}&lon={lngStr}&zoom=18&addressdetails=1";
+        try
+        {
+            var data = await _httpClient.GetFromJsonAsync<AddressDTO>(url);
+
+            if (data?.Address != null)
+            {
+                var street = data.Address.Road ?? "Rua desconhecida";
+                var neighborhood = data.Address.Suburb ?? data.Address.Neighbourhood ?? "";
+                var formattedNeighborhood = !string.IsNullOrEmpty(neighborhood) ? $"{neighborhood}" : "";
+                var city = data.Address.City ?? data.Address.Town ?? data.Address.Village ?? "";
+
+                address.Address = new NominatimAddress(); 
+                address.Address.City = city;
+                address.Address.Neighbourhood = formattedNeighborhood;
+                address.Address.Road = street;
+
+                return address;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro do ViaCEP/Nominatim: {ex.Message}");
+        }
+
+        return null;
     }
 }

@@ -139,7 +139,7 @@ export function OccurrencesFeed() {
 
                     <div className="flex items-start gap-1.5 text-sm text-gray-600">
                       <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                      <span>Lat: {occurrence.latitude.toFixed(4)}, Lng: {occurrence.longitude.toFixed(4)}</span>
+                      <span>{occurrence.street}{occurrence.neighborhood ? `, ${occurrence.neighborhood}` : ''} - {occurrence.city}</span>
                     </div>
                   </div>
                 </div>
