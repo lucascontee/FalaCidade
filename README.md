@@ -37,7 +37,7 @@ O **FalaCidade** é uma plataforma focada na **Transformação Digital** da gest
 
 ## 📂 Estrutura do Projeto
 
-O repositório está organizado separando claramente as responsabilidades do Cliente e do Servidor:
+O repositório está organizado separando as responsabilidades do frontend e do backend:
 
 ```text
 📦 FalaCidade
