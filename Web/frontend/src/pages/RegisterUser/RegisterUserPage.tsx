@@ -5,10 +5,10 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import UserService from "../../services/userService";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../contexts/authContext";
 import axios from "axios";
 
-export function RegisterPage() {
+export function RegisterUserPage() {
   const navigate = useNavigate();
   const { login } = useAuth(); 
 

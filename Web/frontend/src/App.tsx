@@ -1,6 +1,7 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 
-import './App.css'
+// @ts-expect-error: CSS module declarations not available in this project setup
+import './App.css'  
 
 import { LoginPage } from './pages/Login/LoginPage'
 import { OccurrencesFeed } from './pages/Occurrence/OcurrenceFeed'
@@ -8,10 +9,10 @@ import { OccurrenceEditor } from './pages/Occurrence/OccurrenceEditor'
 import { MyOccurrences } from './pages/Occurrence/MyOccurrencesPage'
 
 import { Sidebar } from './layouts/sidebar'
-import { RegisterPage } from './pages/Register/RegisterPage'
+import { RegisterUserPage } from './pages/RegisterUser/RegisterUserPage'
 import { UserManagePage} from './pages/UserManager/UserManagerPage'
-import { useAuth } from './context/authContext'
-import { OccurrenceManageScreen } from './pages/OccurranceManage/OccuranceManagePage'
+import { useAuth } from './contexts/authContext'
+import { OccurrenceManagePage } from './pages/Occurrence/OccuranceManagePage'
 
 const UserRole = {
   Citizen: 0,
@@ -51,13 +52,13 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/register" element={<RegisterUserPage />} />
 
       <Route element={<AuthenticatedLayout />}>
         <Route path="/feed" element={<OccurrencesFeed />} />
         <Route path="/occurrence" element={<OccurrenceEditor />} />
         <Route path="/myoccurrences" element={<MyOccurrences />} />
-        <Route path="/ocurrencemanage" element={<OccurrenceManageScreen />} />
+        <Route path="/ocurrencemanage" element={<OccurrenceManagePage />} />
       </Route>
 
       <Route element={<AdminRoute />}>

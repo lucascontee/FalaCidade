@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck } from "lucide-react";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../contexts/authContext";
 
 const UserRole = {
   Citizen: 0,

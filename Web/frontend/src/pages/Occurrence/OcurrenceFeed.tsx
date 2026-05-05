@@ -4,7 +4,7 @@ import { User, Plus, MapPin, Loader2, AlertCircle } from "lucide-react";
 import { Badge } from "../../components/ui/badge";
 import { ImageWithFallback } from "../../components/ui/imageWithFallback";
 import OccurrenceService, { type Occurrence, OccurrenceStatus } from "../../services/ocurrenceService";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../contexts/authContext";
 
 function getStatusColor(status: OccurrenceStatus) {
   switch (status) {

@@ -4,9 +4,10 @@ import { Search, MapPin, Loader2, AlertCircle, Send, Clock, CheckCircle2, XCircl
 import { Input } from "../../components/ui/input";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
+import { MessageBox } from "../../components/ui/messageBox";
 import { ImageWithFallback } from "../../components/ui/imageWithFallback";
 import OccurrenceService, { type Occurrence, type OccurrenceHistory, OccurrenceStatus } from "../../services/ocurrenceService";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../contexts/authContext";
 import axios from "axios";
 
 function getStatusConfig(status: OccurrenceStatus) {
@@ -19,7 +20,7 @@ function getStatusConfig(status: OccurrenceStatus) {
   }
 }
 
-export function OccurrenceManageScreen() {
+export function OccurrenceManagePage() {
   const { user } = useAuth();
   
   const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
@@ -31,6 +32,7 @@ export function OccurrenceManageScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   
   const [newMessage, setNewMessage] = useState("");
   const [newStatus, setNewStatus] = useState<OccurrenceStatus | "">("");
@@ -61,7 +63,8 @@ export function OccurrenceManageScreen() {
       const historyData = await OccurrenceService.getHistory(occurrence.id);
       setHistories(historyData);
     } catch (err) {
-      console.error("Erro ao buscar histórico:", err);
+      setIsAlertOpen(true);
+      setError("Não foi possível carregar o histórico desta ocorrência.");
       setHistories([]); 
     } finally {
       setIsLoadingHistory(false);
@@ -90,9 +93,11 @@ export function OccurrenceManageScreen() {
 
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        alert(err.response?.data?.error || "Erro ao atualizar ocorrência.");
+        setIsAlertOpen(true);
+        setError(err.response?.data?.error || "Erro ao atualizar a ocorrência.");
       } else {
-        alert("Erro inesperado ao conectar com o servidor.");
+        setIsAlertOpen(true);
+        setError("Erro ao atualizar a ocorrência.");
       }
     } finally {
       setIsSubmitting(false);
@@ -256,6 +261,16 @@ export function OccurrenceManageScreen() {
           </div>
         )}
       </div>
+      <MessageBox
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        title="Erro"
+        message={error}
+        type="danger"
+        onConfirm={() => {
+          setIsAlertOpen(false);
+        }}
+      />
     </div>
   );
 }

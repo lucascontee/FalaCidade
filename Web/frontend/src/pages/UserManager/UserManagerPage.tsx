@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Search, Mail, Loader2, AlertCircle } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { Badge } from "../../components/ui/badge";
+import { MessageBox } from "../../components/ui/messageBox";
 import UserService, { type User } from "../../services/userService";
 
 const UserRole = {
@@ -17,6 +18,7 @@ export function UserManagePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [updatingId, setUpdatingId] = useState<number | null>(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   useEffect(() => {
     async function loadUsers() {
@@ -39,7 +41,8 @@ export function UserManagePage() {
       await UserService.updateRole(userId, newRole);
       setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
     } catch (err) {
-      alert("Erro ao atualizar o papel do usuário.");
+      setError("Não foi possível atualizar o papel do usuário.");
+      setIsAlertOpen(true);
     } finally {
       setUpdatingId(null);
     }
@@ -135,6 +138,16 @@ export function UserManagePage() {
           )}
         </div>
       )}
+      <MessageBox
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        title="Erro"
+        message={error}
+        type="danger"
+        onConfirm={() => {
+          setIsAlertOpen(false);
+        }}
+      />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import './index.css'
 import 'leaflet/dist/leaflet.css'; 
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from './context/authContext.tsx';
+import { AuthProvider } from './contexts/authContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

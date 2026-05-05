@@ -163,9 +163,9 @@ export function OccurrenceEditor() {
                   </MapContainer>
                 </div>
                 {latitude ? (
-                  <p className="text-sm text-green-600 font-medium">✅ Local marcado no mapa.</p>
+                  <p className="text-sm text-green-600 font-medium">Local marcado no mapa.</p>
                 ) : (
-                  <p className="text-sm text-red-500 font-medium">⚠️ Clique no mapa para marcar o local exato.</p>
+                  <p className="text-sm text-red-500 font-medium">Clique no mapa para marcar o local exato.</p>
                 )}
               </div>
 

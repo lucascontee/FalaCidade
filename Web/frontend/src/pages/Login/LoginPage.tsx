@@ -7,7 +7,7 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import UserService from "../../services/userService"; 
 import axios from "axios";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../contexts/authContext";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -16,6 +16,8 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false); 
+  const [errorOnLogin, setErrorOnLogin] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault(); 
@@ -24,20 +26,14 @@ export function LoginPage() {
     try {
       const user = await UserService.login({ email, password });
       login(user);
-
-      console.log('Bem-vindo, ', user.name);
-      console.log('Papel: ', user.role);
       
       navigate('/feed'); 
       
       } catch (error){
       if (axios.isAxiosError(error)) {
         const mensagemServidor = error.response?.data?.error;
-        if (mensagemServidor) {
-          alert(mensagemServidor);
-        } else {
-          alert('Erro ao conectar com o servidor.');
-        }     
+        setErrorMessage(mensagemServidor || 'Erro ao conectar com o servidor.');
+        setErrorOnLogin(true);
       }
     } finally {
       setIsLoading(false); 
@@ -57,6 +53,14 @@ export function LoginPage() {
               Conectando cidadãos e governo
             </p>
           </div>
+
+          {errorOnLogin &&
+          <div className="mb-6 bg-red-100 p-4 rounded-lg">
+            <p className="text-red-500 text-sm">
+              {errorMessage}
+            </p>
+          </div>
+          }
 
           <form onSubmit={handleSignIn} className="space-y-6">
             <div className="space-y-2">
