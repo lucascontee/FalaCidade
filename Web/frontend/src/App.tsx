@@ -1,6 +1,5 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 
-// @ts-expect-error: CSS module declarations not available in this project setup
 import './App.css'  
 
 import { LoginPage } from './pages/Login/LoginPage'
