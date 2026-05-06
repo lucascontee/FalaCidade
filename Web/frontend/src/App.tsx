@@ -13,6 +13,7 @@ import { RegisterUserPage } from './pages/RegisterUser/RegisterUserPage'
 import { UserManagePage} from './pages/UserManager/UserManagerPage'
 import { useAuth } from './contexts/authContext'
 import { OccurrenceManagePage } from './pages/Occurrence/OccuranceManagePage'
+import { NotificationPage } from './pages/Notification/NotificationPage'
 
 const UserRole = {
   Citizen: 0,
@@ -59,6 +60,7 @@ function App() {
         <Route path="/occurrence" element={<OccurrenceEditor />} />
         <Route path="/myoccurrences" element={<MyOccurrences />} />
         <Route path="/ocurrencemanage" element={<OccurrenceManagePage />} />
+        <Route path="/notificacoes" element={<NotificationPage />} />
       </Route>
 
       <Route element={<AdminRoute />}>

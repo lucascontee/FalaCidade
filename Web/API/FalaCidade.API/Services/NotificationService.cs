@@ -29,6 +29,14 @@ public class NotificationService
         return notification;
     }
 
+    public async Task<IEnumerable<Notification>> GetUnreadByUserAsync(int userId)
+    {
+        return await _context.Notifications
+            .Where(n => n.UserId == userId && !n.IsRead)
+            .OrderByDescending(n => n.CreatedAt)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Notification>> GetByUserIdAsync(int userId, bool onlyUnread = false)
     {
         var query = _context.Notifications

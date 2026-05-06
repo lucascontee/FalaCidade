@@ -10,7 +10,7 @@
         public int UserId { get; set; } 
         public User User { get; set; } = null!;
 
-        public int? OccurrenceId { get; set; } // Link opcional para abrir a ocorrência direto da notificação
+        public int? OccurrenceId { get; set; }
         public Occurrence? Occurrence { get; set; }
     }
 }

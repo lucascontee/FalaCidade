@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck } from "lucide-react";
+import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck, Bell } from "lucide-react";
 import { useAuth } from "../contexts/authContext";
+import NotificationService from "../services/notificationService";
+import { useEffect, useState } from "react";
 
 const UserRole = {
   Citizen: 0,
@@ -11,6 +14,30 @@ const UserRole = {
 export function Sidebar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  async function loadNotifications() {
+    if (!user) return;
+    try {
+      const data = await NotificationService.getUnread(user.id);
+      setUnreadCount(data.length);
+    } catch (error) {
+      console.error("Erro ao carregar notificações", error);
+    }
+  }
+
+  useEffect(() => {
+      loadNotifications();
+      const handleNotificationRead = () => {
+        setUnreadCount(prev => (prev > 0 ? prev - 1 : 0));
+      };
+
+      window.addEventListener('notification-read', handleNotificationRead);
+
+      return () => {
+        window.removeEventListener('notification-read', handleNotificationRead);
+      };
+  }, [user]);
 
   const handleLogout = () => {
       logout();
@@ -31,7 +58,23 @@ export function Sidebar() {
         </div>
       </div>
 
+
       <nav className="flex-1 py-6 flex flex-col gap-2 px-2">
+      <SidebarItem 
+              to="/notificacoes" 
+              icon={
+                <div className="relative">
+                  <Bell size={24} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </div>
+              } 
+              label="Notificações" 
+            />
+
         <SidebarItem 
           to="/feed" 
           icon={<LayoutGrid size={24} />} 

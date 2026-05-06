@@ -163,6 +163,18 @@ public class OccurrenceService
 
         await _context.OccurrenceHistories.AddAsync(historyRecord);
         await _context.SaveChangesAsync();
+
+        string statusName = newStatus switch
+        {
+            OccurrenceStatus.InProgress => "Em Andamento",
+            OccurrenceStatus.Resolved => "Resolvido",
+            OccurrenceStatus.Rejected => "Reprovado",
+            _ => "Em Análise"
+        };
+
+        string notifMessage = $"Sua ocorrência '{occurrence.Title}' mudou para o status '{statusName}'.";
+
+        await _notificationService.CreateAsync(occurrence.CitizenId, notifMessage, occurrenceId);
     }
 
     public async Task<AddressDTO> GetAddressFromCoordsAsync(double lat, double lng)

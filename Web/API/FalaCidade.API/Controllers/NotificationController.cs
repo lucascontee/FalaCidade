@@ -1,5 +1,7 @@
-﻿using FalaCidade.API.Services;
+﻿using FalaCidade.API.Entities;
+using FalaCidade.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FalaCidade.API.Controllers
 {
@@ -13,6 +15,7 @@ namespace FalaCidade.API.Controllers
         {
             _notificationService = notificationService;
         }
+
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetUserNotifications(int userId, [FromQuery] bool onlyUnread = false)
@@ -35,6 +38,12 @@ namespace FalaCidade.API.Controllers
             return NoContent(); 
         }
 
+        [HttpGet("user/{userId}/unread")]
+        public async Task<IActionResult> GetUnread(int userId)
+        {
+            var notifications = await _notificationService.GetUnreadByUserAsync(userId);
+            return Ok(notifications);
+        }
 
         [HttpPatch("user/{userId}/read-all")]
         public async Task<IActionResult> MarkAllAsRead(int userId)
