@@ -107,7 +107,8 @@ export function OccurrencesFeed() {
               {occurrences.map((occurrence) => (
                 <div
                   key={occurrence.id}
-                  className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+                  onClick={() => navigate(`/occurrence/${occurrence.id}`)}
+                  className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
                 >
                   <div className="relative aspect-[4/5] w-full bg-gray-200">
                     <ImageWithFallback

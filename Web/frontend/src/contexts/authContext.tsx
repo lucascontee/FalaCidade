@@ -22,13 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Função para salvar o usuário quando ele faz login
   const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem('@FalaCidade:user', JSON.stringify(userData));
   };
 
-  // Função para limpar tudo quando ele clica em Sair
   const logout = () => {
     setUser(null);
     localStorage.removeItem('@FalaCidade:user');

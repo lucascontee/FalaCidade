@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
-import { Search, MapPin, Loader2, AlertCircle, Send, Clock, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import { Search, MapPin, Loader2, AlertCircle, Send, Clock, CheckCircle2, XCircle, AlertTriangle, UserIcon } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
@@ -8,6 +8,7 @@ import { MessageBox } from "../../components/ui/messageBox";
 import { ImageWithFallback } from "../../components/ui/imageWithFallback";
 import OccurrenceService, { type Occurrence, type OccurrenceHistory, OccurrenceStatus } from "../../services/ocurrenceService";
 import { useAuth } from "../../contexts/authContext";
+import UserService from "../../services/userService";
 import axios from "axios";
 
 function getStatusConfig(status: OccurrenceStatus) {
@@ -33,6 +34,7 @@ export function OccurrenceManagePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [createdByName, setCreatedByName] = useState("");
   
   const [newMessage, setNewMessage] = useState("");
   const [newStatus, setNewStatus] = useState<OccurrenceStatus | "">("");
@@ -62,6 +64,9 @@ export function OccurrenceManagePage() {
     try {
       const historyData = await OccurrenceService.getHistory(occurrence.id);
       setHistories(historyData);
+      UserService.getUserById(occurrence.citizenId || 0).then(user => {
+        setCreatedByName(user.name);
+      });
     } catch (err) {
       setIsAlertOpen(true);
       setError("Não foi possível carregar o histórico desta ocorrência.");
@@ -159,24 +164,22 @@ export function OccurrenceManagePage() {
 
       <div className="hidden md:flex flex-1 flex-col h-full bg-gray-50 overflow-hidden">
         {selectedOccurrence ? (
-          <div className="flex-1 overflow-y-auto p-6 flex flex-col xl:flex-row gap-6">
+          <div className="h-full flex-1 overflow-y-auto p-6 flex flex-col xl:flex-row gap-6">
             
-            <div className="flex-1 space-y-6">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <div className="flex justify-between items-start mb-4">
+            <div className="h-full flex-1 space-y-6">
+              <div className="h-full bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div className="flex justify-between items-start mb-2">
                   <h2 className="text-2xl font-bold text-gray-900">{selectedOccurrence.title}</h2>
                   <Badge className={getStatusConfig(selectedOccurrence.status).color}>
                     {getStatusConfig(selectedOccurrence.status).label}
                   </Badge>
                 </div>
                 
-                <p className="text-gray-700 whitespace-pre-wrap mb-6">{selectedOccurrence.description}</p>
-                
-                <div className="flex items-center gap-2 text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
-                  <MapPin className="w-4 h-4" />
-                  <span>{selectedOccurrence.street}{selectedOccurrence.neighborhood ? `, ${selectedOccurrence.neighborhood}` : ''} - {selectedOccurrence.city}</span>
-                </div>
-
+                <p className="text-gray-700 whitespace-pre-wrap mb-2">{selectedOccurrence.description}</p>
+                <div className="flex items-center gap-2 text-sm text-gray-600 font-medium mb-6">
+                  <UserIcon size={16} className="text-blue-500" />
+                  <span>Solicitante: <span className="text-gray-900">{createdByName || "Cidadão"}</span></span>
+                </div>  
                 <div className="flex justify-center w-full">
                   <div className="aspect-[4/5] w-full max-w-sm rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
                     <ImageWithFallback 
@@ -185,8 +188,17 @@ export function OccurrenceManagePage() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                </div>
 
+
+                  
+                </div>
+                <div className="text-gray-700 whitespace-pre-wrap mt-6 text-sm"> 
+                  Data da ocorrência: <span className="text-gray-600">{new Date(selectedOccurrence.createdAt).toLocaleString('pt-BR')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500 mt-2 pb-6 border-b border-gray-100">
+                  <MapPin className="w-4 h-4" />
+                  <span>{selectedOccurrence.street}{selectedOccurrence.neighborhood ? `, ${selectedOccurrence.neighborhood}` : ''} - {selectedOccurrence.city}</span>
+                </div>
               </div>
             </div>
 

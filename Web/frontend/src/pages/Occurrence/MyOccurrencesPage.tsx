@@ -90,7 +90,7 @@ export function MyOccurrences() {
             {occurrences.map((occurrence) => (
               <div
                 key={occurrence.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-blue-200 transition-colors cursor-pointer"
+                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => navigate(`/occurrence/${occurrence.id}`)}
               >
                 <div className="relative aspect-[4/5] w-full bg-gray-200">

@@ -108,7 +108,7 @@ export function NotificationPage() {
                     <div className="pt-3 flex gap-3">
                       <button 
                         onClick={() => navigate(`/occurrence/${notif.occurrenceId}`)}
-                        className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                        className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
                       >
                         Ver ocorrência
                       </button>
@@ -116,7 +116,7 @@ export function NotificationPage() {
                       {!notif.isRead && (
                         <button 
                           onClick={() => handleMarkAsRead(notif.id)}
-                          className="text-xs font-medium text-gray-400 hover:text-green-600 flex items-center gap-1 transition-colors"
+                          className="text-xs font-medium text-gray-400 hover:text-green-600 flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Check size={14} />
                           Marcar como lida

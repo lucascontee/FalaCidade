@@ -30,6 +30,7 @@ export interface Occurrence {
   createdAt: string;
   category?: Category; 
   histories?: OccurrenceHistory[];
+  citizenId? : number;  
 }
 
 export interface CreateOccurrencePayload {
@@ -88,6 +89,11 @@ const OccurrenceService = {
     await api.post(`/api/occurrence/${occurrenceId}/history`, payload);
   },
 
+  getById: async (id: number): Promise<Occurrence> => {
+    const response = await api.get<Occurrence>(`/api/occurrence/${id}`);
+    return response.data;
+  },
+
   getHistory: async (occurrenceId: number): Promise<OccurrenceHistory[]> => {
     const response = await api.get<OccurrenceHistory[]>(`/api/occurrence/${occurrenceId}/history`);
     return response.data;
@@ -95,7 +101,6 @@ const OccurrenceService = {
 
   getAddressFromCoords: async (lat: number, lng: number): Promise<string> => {
     try {
-      // Fazemos uma requisição GET para a API do Nominatim
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
       );
