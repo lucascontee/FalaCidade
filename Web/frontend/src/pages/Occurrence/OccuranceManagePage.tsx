@@ -195,7 +195,7 @@ export function OccurrenceManagePage() {
                 <div className="text-gray-700 whitespace-pre-wrap mt-6 text-sm"> 
                   Data da ocorrência: <span className="text-gray-600">{new Date(selectedOccurrence.createdAt).toLocaleString('pt-BR')}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-500 mt-2 pb-6 border-b border-gray-100">
+                <div className="flex items-center gap-2 text-sm text-gray-500 mt-2 pb-6">
                   <MapPin className="w-4 h-4" />
                   <span>{selectedOccurrence.street}{selectedOccurrence.neighborhood ? `, ${selectedOccurrence.neighborhood}` : ''} - {selectedOccurrence.city}</span>
                 </div>

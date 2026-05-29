@@ -149,14 +149,12 @@ export function OccurrenceEditor() {
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    {/* Nosso ouvinte de cliques */}
                     <MapClickHandler 
                       onLocationSelect={(lat, lng) => {
                         setLatitude(lat);
                         setLongitude(lng);
                       }} 
                     />
-                    {/* Renderiza o pino se tivermos uma coordenada */}
                     {latitude && longitude && (
                       <Marker position={[latitude, longitude]} />
                     )}
@@ -169,7 +167,6 @@ export function OccurrenceEditor() {
                 )}
               </div>
 
-              {/* Foto */}
               <div className="space-y-2">
                 <Label>Foto do Problema</Label>
                 <div className="flex gap-2">
@@ -186,7 +183,6 @@ export function OccurrenceEditor() {
                 </div>
               </div>
 
-              {/* Categoria */}
               <div className="space-y-2">
                 <Label htmlFor="category">Categoria</Label>
                 {isLoadingCategories ? (
@@ -211,7 +207,6 @@ export function OccurrenceEditor() {
                 )}
               </div>
 
-              {/* Título */}
               <div className="space-y-2">
                 <Label htmlFor="title">Título</Label>
                 <Input
@@ -225,7 +220,6 @@ export function OccurrenceEditor() {
                 />
               </div>
 
-              {/* Descrição */}
               <div className="space-y-2">
                 <Label htmlFor="description">Descrição Detalhada</Label>
                 <textarea
