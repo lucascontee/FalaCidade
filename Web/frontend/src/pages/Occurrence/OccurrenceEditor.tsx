@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Camera, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Camera, Loader2, AlertCircle, CheckCircle2, X } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -35,7 +35,7 @@ export function OccurrenceEditor() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(""); // Agora guarda a string Base64 da foto
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
 
@@ -73,6 +73,17 @@ export function OccurrenceEditor() {
 
     fetchInitialData();
   }, []);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhotoUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file); 
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,20 +178,49 @@ export function OccurrenceEditor() {
                 )}
               </div>
 
+              {/* MUDANÇA PRINCIPAL: Seção da Foto */}
               <div className="space-y-2">
                 <Label>Foto do Problema</Label>
-                <div className="flex gap-2">
-                  <Input 
-                    type="url" 
-                    placeholder="Cole a URL da imagem aqui..." 
-                    value={photoUrl}
-                    onChange={(e) => setPhotoUrl(e.target.value)}
-                    className="flex-1 bg-white"
-                  />
-                  <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center flex-shrink-0 border border-gray-300">
-                    <Camera className="w-5 h-5 text-gray-500" />
+                
+                {photoUrl ? (
+                  <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-100">
+                    <img 
+                      src={photoUrl} 
+                      alt="Preview do problema" 
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setPhotoUrl("")}
+                      className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-sm hover:bg-red-50 text-gray-700 hover:text-red-600 transition-colors"
+                      title="Remover foto"
+                    >
+                      <X size={20} />
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex items-center justify-center w-full">
+                    <label 
+                      htmlFor="dropzone-file" 
+                      className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <Camera className="w-10 h-10 mb-3 text-gray-400" />
+                        <p className="mb-2 text-sm text-gray-600">
+                          <span className="font-semibold text-blue-600">Clique para anexar</span> ou arraste uma foto
+                        </p>
+                        <p className="text-xs text-gray-500">Apenas arquivos JPG ou PNG</p>
+                      </div>
+                      <input 
+                        id="dropzone-file" 
+                        type="file" 
+                        accept="image/png, image/jpeg" 
+                        className="hidden" 
+                        onChange={handleImageUpload} 
+                      />
+                    </label>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">

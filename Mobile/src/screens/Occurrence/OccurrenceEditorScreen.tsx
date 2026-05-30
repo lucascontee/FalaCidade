@@ -8,14 +8,17 @@ import {
   ActivityIndicator, 
   KeyboardAvoidingView, 
   Platform,
-  Alert
+  Alert,
+  Image
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ArrowLeft, Camera, AlertCircle, CheckCircle2 } from "lucide-react-native";
+import { ArrowLeft, Camera, Image as ImageIcon, AlertCircle, CheckCircle2, Pickaxe } from "lucide-react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import OccurrenceService, { type Category } from "../../services/ocurrenceService";
 import { useAuth } from "../../contexts/authContext";
+import * as ImagePicker from 'expo-image-picker'; 
+
 
 export function OccurrenceEditorScreen() {
   const navigation = useNavigation<any>();
@@ -40,6 +43,29 @@ export function OccurrenceEditorScreen() {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (status !== 'granted') {
+      Alert.alert('Permissão Negada', 'Precisamos de acesso à sua galeria para escolher uma foto.');
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 5],
+      quality: 0.3, 
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets[0].base64) {
+      const imageBase64String = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      
+      setPhotoUrl(imageBase64String);
+    }
+  };
 
   useEffect(() => {
     async function fetchInitialData() {
@@ -173,19 +199,32 @@ export function OccurrenceEditorScreen() {
         </View>
 
         <View className="mb-6">
-          <Text className="text-sm font-bold text-gray-700 mb-2">Foto do Problema (URL)</Text>
-          <View className="flex-row gap-3">
-            <TextInput 
-              placeholder="Cole o link da imagem aqui..."
-              value={photoUrl}
-              onChangeText={setPhotoUrl}
-              autoCapitalize="none"
-              className="flex-1 h-14 bg-white border border-gray-200 rounded-xl px-4 text-gray-900"
-            />
-            <View className="w-14 h-14 bg-gray-100 rounded-xl items-center justify-center border border-gray-200">
-              <Camera size={24} color="#9ca3af" />
+          <Text className="text-sm font-bold text-gray-700 mb-2">Foto do Problema</Text>
+          
+          {photoUrl ? (
+            <View className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden border border-gray-200">
+              <Image source={{ uri: photoUrl }} className="w-full h-full" />
+              
+              <TouchableOpacity 
+                onPress={pickImage}
+                className="absolute bottom-4 right-4 bg-white/90 p-3 rounded-full shadow-sm"
+              >
+                <Camera size={20} color="#1f2937" />
+              </TouchableOpacity>
             </View>
-          </View>
+          ) : (
+            <TouchableOpacity 
+              activeOpacity={0.7}
+              onPress={pickImage}
+              className="w-full aspect-[4/5] bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300 items-center justify-center"
+            >
+              <View className="w-16 h-16 bg-white rounded-full items-center justify-center shadow-sm mb-3">
+                <ImageIcon size={28} color="#9ca3af" />
+              </View>
+              <Text className="text-gray-500 font-medium">Toque para adicionar foto</Text>
+              <Text className="text-gray-400 text-xs mt-1">Galeria do celular</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         <View className="mb-6">

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck, Bell } from "lucide-react";
+import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck, Bell, Tag } from "lucide-react";
 import { useAuth } from "../contexts/authContext";
 import NotificationService from "../services/notificationService";
 import { useEffect, useState } from "react";
@@ -95,6 +95,7 @@ export function Sidebar() {
         {(user?.role === UserRole.Admin || user?.role === UserRole.Reviewer) && (
           <>
             <SidebarItem to="/ocurrencemanage" icon={<ListCheck size={24} />} label="Gestão de Ocorrências" />
+            <SidebarItem to="/category" icon={<Tag size={24} />} label="Criar Categoria" />
           </>
         )}
         

@@ -18,7 +18,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 {
-    optionsBuilder.UseSqlServer(builder.Configuration["DbConnectionString"]);
+    optionsBuilder.UseSqlite(builder.Configuration["DbConnectionString"]);
 });
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

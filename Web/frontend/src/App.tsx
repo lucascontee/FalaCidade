@@ -14,6 +14,7 @@ import { useAuth } from './contexts/authContext'
 import { OccurrenceManagePage } from './pages/Occurrence/OccuranceManagePage'
 import { NotificationPage } from './pages/Notification/NotificationPage'
 import { OccurrenceDetailsPage } from './pages/Occurrence/OccurrenceDetailPage'
+import { CategoryCreate } from './pages/Category/CategoryCreate'
 
 const UserRole = {
   Citizen: 0,
@@ -62,6 +63,7 @@ function App() {
         <Route path="/ocurrencemanage" element={<OccurrenceManagePage />} />
         <Route path="/notificacoes" element={<NotificationPage />} />
         <Route path="/occurrence/:id" element={<OccurrenceDetailsPage />} />
+        <Route path="/category" element={<CategoryCreate />} />
       </Route>
 
       <Route element={<AdminRoute />}>

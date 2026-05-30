@@ -14,6 +14,7 @@ import { OccurrenceDetailsScreen } from './src/screens/Occurrence/OccurrenceDeta
 import { UserManageScreen } from './src/screens/UserManager/UserManagerScreen';
 import { View } from 'lucide-react-native';
 import { ActivityIndicator } from 'react-native';
+import { CategoryCreateScreen } from './src/screens/Category/CategoryCreateScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ function RootNavigator() {
             <Stack.Screen name="OccurrenceManage" component={OccurrenceManageScreen} />
             <Stack.Screen name="Notifications" component={NotificationScreen} />
             <Stack.Screen name="OccurrenceDetails" component={OccurrenceDetailsScreen} />
+            <Stack.Screen name="CategoryCreate" component={CategoryCreateScreen} />
 
             {user.role === UserRole.Admin && (
               <Stack.Screen name="UserManage" component={UserManageScreen} />

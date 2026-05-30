@@ -7,7 +7,7 @@ import {
   DeviceEventEmitter,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck, Bell, X } from "lucide-react-native";
+import { LayoutGrid, ClipboardList, PlusCircle, LogOut, Users, ListCheck, Bell, X, Tag } from "lucide-react-native";
 import { useAuth } from "../contexts/authContext";
 import NotificationService from "../services/notificationService";
 
@@ -135,12 +135,21 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             />
 
             {(user?.role === UserRole.Admin || user?.role === UserRole.Reviewer) && (
-              <SidebarItem 
-                label="Gestão de Ocorrências" 
-                isActive={route.name === "OccurrenceManage"}
-                onPress={() => handleNavigate("OccurrenceManage")}
-                icon={<ListCheck size={24} color={route.name === "OccurrenceManage" ? "#2563eb" : "#4b5563"} />} 
-              />
+              <>
+                <SidebarItem 
+                  label="Gestão de Ocorrências" 
+                  isActive={route.name === "OccurrenceManage"}
+                  onPress={() => handleNavigate("OccurrenceManage")}
+                  icon={<ListCheck size={24} color={route.name === "OccurrenceManage" ? "#2563eb" : "#4b5563"} />} 
+                />
+
+                <SidebarItem 
+                  label="Criar Categoria" 
+                  isActive={route.name === "CategoryCreate"}
+                  onPress={() => handleNavigate("CategoryCreate")}
+                  icon={<Tag size={24} color={route.name === "CategoryCreate" ? "#2563eb" : "#4b5563"} />} 
+                />
+              </>
             )}
 
             {user?.role === UserRole.Admin && (

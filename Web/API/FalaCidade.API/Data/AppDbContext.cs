@@ -1,4 +1,5 @@
 ﻿using FalaCidade.API.Entities;
+using FalaCidade.API.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace FalaCidade.API.Data;
@@ -53,5 +54,18 @@ public class AppDbContext : DbContext
             .WithMany() 
             .HasForeignKey(h => h.ResponsibleUserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "admin",
+                    Email = "admin@falacidade.com",
+                    Cpf = "000.000.000-00",
+                    Role = UserRole.Admin,
+                    CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    Password = "$2a$12$gFyOYQ5rLs0HQ5WsxfJ8rOdkpvWONYT0RiZEHvAf4lQ5DBTga4fbi",
+                }
+            );
     }
 }

@@ -13,9 +13,12 @@ import { MessageSquare } from "lucide-react-native";
 import UserService from "../../services/userService"; 
 import axios from "axios";
 import { useAuth } from "../../contexts/authContext"; 
+import { useNavigation } from "@react-navigation/native";
 
 export function LoginScreen() {
   const { login } = useAuth(); 
+  
+  const navigation = useNavigation<any>();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -108,7 +111,9 @@ export function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity className="mt-8 items-center">
+          <TouchableOpacity 
+            className="mt-8 items-center"  
+            onPress={() => navigation.navigate("Register")}>
             <Text className="text-blue-600 font-semibold text-base">
               Criar uma conta
             </Text>
